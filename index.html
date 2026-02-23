@@ -1,194 +1,97 @@
 <!DOCTYPE html>
-<html lang="az">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legend Bett | Official 1win Style</title>
+    <title>Gemini Aviator Simulyatoru</title>
     <style>
-        :root {
-            --bg-dark: #0f1014;
-            --panel-bg: #1c1d22;
-            --blue-btn: #007aff;
-            --green-btn: #22c55e;
-            --text-gray: #94a3b8;
-            --purple-gradient: linear-gradient(180deg, #8b5cf6, #6d28d9);
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding-bottom: 70px;
-            overflow-x: hidden;
-        }
-
-        /* 1win Header Kopyası */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            background: #16171b;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo { font-size: 22px; font-weight: 900; color: white; font-style: italic; }
-        .depozit-btn {
-            background: var(--green-btn);
-            border: none;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        /* Üst Naviqasiya (Lobi, Canlı Seks Masın) */
-        .top-nav {
-            display: flex;
-            gap: 10px;
-            padding: 15px;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        .nav-pill {
-            background: #25262b;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            color: var(--text-gray);
-        }
-
-        .nav-pill.active { background: var(--blue-btn); color: white; }
-
-        /* Cekpot Paneli (Şəkildəki kimi) */
-        .jackpot-panel {
-            width: 92%;
-            margin: 10px auto;
-            background: var(--purple-gradient);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-        }
-
-        .jackpot-title { font-size: 16px; opacity: 0.9; }
-        .jackpot-amount { font-size: 28px; font-weight: 900; margin: 10px 0; letter-spacing: 1px; }
-
-        /* Oyun Grid-i */
-        .section-title { padding: 15px 20px; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
-        
-        .game-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            padding: 0 15px;
-        }
-
-        .game-card {
-            background: var(--panel-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .game-card img { width: 100%; height: 130px; object-fit: cover; }
-        .play-overlay {
-            position: absolute;
-            bottom: 0; width: 100%;
-            background: rgba(0,0,0,0.6);
-            padding: 8px;
-            text-align: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* Footer Naviqasiya */
-        .footer-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: #16171b;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid #2d2e35;
-        }
-
-        .foot-item { text-align: center; color: var(--text-gray); font-size: 11px; }
-        .foot-item i { display: block; font-size: 22px; margin-bottom: 4px; }
-        .foot-item.active { color: var(--blue-btn); }
-
+        body { background: #1a1a1a; color: white; font-family: sans-serif; text-align: center; }
+        #game-box { width: 600px; height: 400px; background: #000; margin: 20px auto; position: relative; border: 2px solid #ff003c; overflow: hidden; }
+        #plane { position: absolute; bottom: 20px; left: 20px; font-size: 40px; transition: 0.1s; }
+        #multiplier { font-size: 50px; margin-top: 150px; color: #ff003c; }
+        .controls { margin-top: 20px; }
+        button { padding: 15px 30px; font-size: 20px; background: #ff003c; color: white; border: none; cursor: pointer; border-radius: 5px; }
+        button:disabled { background: #555; }
+        #status { margin-top: 10px; font-size: 18px; color: #00ff00; }
     </style>
 </head>
-<body onclick="initAudio()">
-
-    <audio id="sndClick" src="https://www.soundjay.com/buttons/button-16.mp3"></audio>
-    <audio id="sndWin" src="https://www.fesliyanstudios.com/play-mp3/2908"></audio>
-
-    <div class="header">
-        <div class="logo">1win</div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <span id="balance" style="font-weight: bold;">0,40 AZN</span>
-            <button class="depozit-btn" onclick="playWin()">Depozit etmək</button>
-        </div>
+<body>
+    <h1>Aviator Vizual Simulyasiya</h1>
+    <div id="game-box">
+        <div id="multiplier">1.00x</div>
+        <div id="plane">🛫</div>
     </div>
-
-    <div class="top-nav">
-        <div class="nav-pill active">Lobbi</div>
-        <div class="nav-pill">Canlı kazino</div>
-        <div class="nav-pill">Sürətli oyunlar</div>
+    <div class="controls">
+        <p>Balans: <span id="balance">100.00</span> AZN</p>
+        <input type="number" id="bet" value="10" min="1">
+        <button id="startBtn" onclick="startGame()">Mərc Et</button>
+        <button id="cashOutBtn" onclick="cashOut()" disabled>Pulu Götür</button>
     </div>
-
-    <div class="jackpot-panel">
-        <div class="jackpot-title">Ümumi cekpot</div>
-        <div class="jackpot-amount" id="jackpotNum">40.795.031 $</div>
-        <button style="background:white; color:black; border:none; padding:8px 20px; border-radius:10px; font-weight:bold;">Bütün dassaqa baxmaq</button>
-    </div>
-
-    <div class="section-title">2win games <span style="font-size: 12px; color: var(--text-gray);">Digər oyunlar ></span></div>
-
-    <div class="game-grid">
-        <div class="game-card" onclick="playBtn()">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz-M8v1Xp_x-FshM9O6Y69H_7zUv7E2xM4Yw&s" alt="Lucky Jet">
-            <div class="play-overlay">LUCKY JET</div>
-        </div>
-        <div class="game-card" onclick="location.href='penalty.html'; playBtn();">
-            <img src="https://img.freepik.com/free-vector/soccer-stadium_1284-22432.jpg" alt="Penalty">
-            <div class="play-overlay">PENALTY</div>
-        </div>
-    </div>
-
-    <nav class="footer-nav">
-        <div class="foot-item">♤<br>Əsas səhifə</div>
-        <div class="foot-item active">🎰<br>Dassaq</div>
-        <div class="foot-item">br>İdman</div>
-        <div class="foot-item">👤<br>Menyu</div>
-    </nav>
+    <p id="status"></p>
 
     <script>
-        // Cekpotu canlı artır
-        let jkAmount = 40795031;
-        setInterval(() => {
-            jkAmount += Math.floor(Math.random() * 10);
-            document.getElementById('jackpotNum').innerText = jkAmount.toLocaleString() + " $";
-        }, 3000);
+        let balance = 100;
+        let currentMultiplier = 1.00;
+        let crashPoint = 0;
+        let gameInterval;
+        let isPlaying = false;
 
-        function playBtn() {
-            document.getElementById('sndClick').play();
+        function startGame() {
+            let bet = parseFloat(document.getElementById('bet').value);
+            if (bet > balance) { alert("Balans yetərli deyil!"); return; }
+            
+            isPlaying = true;
+            balance -= bet;
+            updateUI();
+            
+            currentMultiplier = 1.00;
+            crashPoint = (Math.random() * 5 + 1).toFixed(2); // 1.00 ilə 6.00 arası təsadüfi
+            
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('cashOutBtn').disabled = false;
+            document.getElementById('status').innerText = "Təyyarə havaya qalxdı...";
+            
+            gameInterval = setInterval(() => {
+                currentMultiplier += 0.01;
+                document.getElementById('multiplier').innerText = currentMultiplier.toFixed(2) + "x";
+                
+                // Təyyarəni vizual olaraq yuxarı və sağa hərəkət etdiririk
+                let plane = document.getElementById('plane');
+                plane.style.left = (20 + (currentMultiplier - 1) * 50) + "px";
+                plane.style.bottom = (20 + (currentMultiplier - 1) * 30) + "px";
+
+                if (currentMultiplier >= crashPoint) {
+                    gameOver(false);
+                }
+            }, 100);
         }
 
-        function playWin() {
-            document.getElementById('sndWin').play();
-            alert("Legend Bett Xüsusi Bonusu Aktiv Edildi!");
+        function cashOut() {
+            if (!isPlaying) return;
+            let bet = parseFloat(document.getElementById('bet').value);
+            let winAmount = bet * currentMultiplier;
+            balance += winAmount;
+            gameOver(true, winAmount);
         }
 
-        function initAudio() {
-            // Mobil cihazlarda səsin açılması üçün ilk klik
+        function gameOver(win, amount = 0) {
+            clearInterval(gameInterval);
+            isPlaying = false;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('cashOutBtn').disabled = true;
+            
+            if (win) {
+                document.getElementById('status').innerText = "UDDUNUZ! +" + amount.toFixed(2) + " AZN";
+                document.getElementById('status').style.color = "#00ff00";
+            } else {
+                document.getElementById('status').innerText = "Təyyarə uçub getdi (Crash)!";
+                document.getElementById('status').style.color = "#ff003c";
+                document.getElementById('plane').innerText = "💥";
+                setTimeout(() => { document.getElementById('plane').innerText = "🛫"; }, 2000);
+            }
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('balance').innerText = balance.toFixed(2);
         }
     </script>
 </body>
