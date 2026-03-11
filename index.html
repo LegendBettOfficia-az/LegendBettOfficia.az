@@ -1,216 +1,54 @@
-<!DOCTYPE html>
-<html lang="az">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🍒 Ən Mükəmməl Meyvə Slotu 🍉</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #1a0033, #4b0066);
-      font-family: Arial, sans-serif;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    h1 {
-      margin: 10px;
-      text-shadow: 0 0 15px #ff00ff;
-    }
-    #slot-machine {
-      display: flex;
-      gap: 10px;
-      background: #111;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px rgba(255,0,255,0.6);
-      border: 4px solid #ff00ff;
-    }
-    .reel {
-      width: 120px;
-      height: 360px;
-      overflow: hidden;
-      background: #000;
-      border: 3px solid #ffd700;
-      border-radius: 15px;
-      position: relative;
-    }
-    .strip {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      transition: transform 0.1s linear;
-    }
-    .symbol {
-      width: 120px;
-      height: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 80px;
-      background: rgba(255,255,255,0.05);
-    }
-    #controls {
-      margin: 20px;
-      text-align: center;
-    }
-    button {
-      padding: 15px 40px;
-      font-size: 24px;
-      background: #ff0066;
-      color: white;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(255,0,100,0.7);
-      transition: all 0.3s;
-    }
-    button:hover {
-      transform: scale(1.1);
-      background: #ff3399;
-    }
-    button:disabled {
-      background: #555;
-      cursor: not-allowed;
-    }
-    #credit {
-      font-size: 28px;
-      margin: 10px;
-    }
-    #result {
-      font-size: 32px;
-      margin: 15px;
-      min-height: 50px;
-      text-shadow: 0 0 10px gold;
-    }
-  </style>
-</head>
-<body>
+print("=== YENİ OYUNUMUZ: SLUT LEYLA - SOURCE OF COURSE 🔥 ===")
+print("Source... source... of course 😏\n")
+print("21 yaşlı Leyla qarşında dayanır. Qara dar top və super qısa yubka geyinib, dodaqlarını dişləyib sənə baxır.")
 
-  <h1>🍒 Meyvə Slotu 2026 Edition 🍋</h1>
-  <div id="credit">Balans: 1000 manat</div>
-  <div id="slot-machine">
-    <div class="reel"><div class="strip" id="reel1"></div></div>
-    <div class="reel"><div class="strip" id="reel2"></div></div>
-    <div class="reel"><div class="strip" id="reel3"></div></div>
-  </div>
-  
-  <div id="result"></div>
-  
-  <div id="controls">
-    <button id="spin">SPIN! (100 manat)</button>
-  </div>
+lust = 25      # Leyla İstəyi
+itaet = 15     # İtaət səviyyəsi
 
-  <script>
-    const symbols = ['🍒', '🍋', '🍊', '🍉', '🍇', '🍓', '🍍', '⭐', '💎', '7️⃣'];
-    const symbolHeight = 120;
-    const reelStripCount = 30; // nə qədər simvol olacaq (daha çox = daha uzun spin)
+while True:
+    print(f"\n{'='*40}")
+    print(f"Leyla İstəyi: {lust}/100")
+    print(f"İtaət: {itaet}/100")
+    print(f"{'='*40}\n")
     
-    let credit = 1000;
-    const creditEl = document.getElementById('credit');
-    const resultEl = document.getElementById('result');
-    const spinBtn = document.getElementById('spin');
+    if lust >= 90 and itaet >= 80:
+        print("🎉 LEYLA TAM SƏNİN OLDU! O artıq sənin şəxsi slutundur... Source of course! 🔥💦")
+        break
     
-    // Hər reel üçün strip yaradırıq
-    function createReelStrip(reelId) {
-      const strip = document.getElementById(reelId);
-      strip.innerHTML = '';
-      for (let i = 0; i < reelStripCount * 2; i++) { // iki dəfə təkrar ki, sonsuz görünsün
-        const sym = symbols[Math.floor(Math.random() * symbols.length)];
-        const div = document.createElement('div');
-        div.className = 'symbol';
-        div.textContent = sym;
-        strip.appendChild(div);
-      }
-    }
+    print("Nə etmək istəyirsən, Sahib?")
+    print("1. Boynundan öp və əllərini bədənində gəzdir")
+    print("2. Paltarlarını yavaş-yavaş çıxart")
+    print("3. Onu diz çökdür və nə istədiyini de")
+    print("4. Özün tam təsvir et (istədiyin hər şeyi yaz!)")
+    print("5. Oyundan çıx")
     
-    createReelStrip('reel1');
-    createReelStrip('reel2');
-    createReelStrip('reel3');
+    secim = input("\nSeçimini yaz (1-5): ").strip()
     
-    let isSpinning = false;
+    if secim == "1":
+        print("\nLeyla zövqlə inləyir: 'Ahh sahibim... daha bərk sıx! 🔥' Bədəni sənə yapışır.")
+        lust += 18
+        itaet += 8
+    elif secim == "2":
+        print("\nOnun paltarlarını çıxartdın. Gözəl formaları üzə çıxdı. Leyla həyəcanla nəfəs alır: 'Source of course...'")
+        lust += 25
+        itaet += 10
+    elif secim == "3":
+        print("\nLeyla dizlərinin üstünə çökür və gözlərini qaldırıb baxır: 'Sahibim... əmr ver mənə...'")
+        itaet += 22
+        lust += 12
+    elif secim == "4":
+        custom = input("\nNə etmək istəyirsən? Tam təsvir et: ")
+        print(f"\nSən {custom} etdin. Leyla şiddətli şəkildə inləyir və daha çox istəyir 😩💦 Source of course!")
+        lust += 30
+        itaet += 15
+    elif secim == "5":
+        print("\nOyundan çıxdın. Gələn dəfə daha azğın olacağıq 😉")
+        break
+    else:
+        print("\nYanlış seçim, yenidən cəhd et.")
     
-    function getRandomStop() {
-      return Math.floor(Math.random() * (reelStripCount * symbolHeight));
-    }
-    
-    function spinReel(reelId, stopPos, delay, callback) {
-      const strip = document.getElementById(reelId);
-      strip.style.transition = 'none';
-      strip.style.transform = `translateY(0px)`;
-      
-      setTimeout(() => {
-        strip.style.transition = `transform ${3 + delay}s cubic-bezier(0.25, 0.1, 0.25, 1)`;
-        strip.style.transform = `translateY(-${stopPos}px)`;
-      }, 50 + delay * 1000);
-      
-      setTimeout(callback, (3 + delay) * 1000 + 100);
-    }
-    
-    function checkWin(pos1, pos2, pos3) {
-      const s1 = symbols[pos1 % symbols.length];
-      const s2 = symbols[pos2 % symbols.length];
-      const s3 = symbols[pos3 % symbols.length];
-      
-      if (s1 === s2 && s2 === s3) {
-        const multiplier = (s1 === '7️⃣' || s1 === '💎') ? 50 : 
-                          (s1 === '⭐') ? 20 : 10;
-        return multiplier * 100; // qazanc
-      }
-      return 0;
-    }
-    
-    spinBtn.addEventListener('click', () => {
-      if (isSpinning || credit < 100) return;
-      
-      credit -= 100;
-      creditEl.textContent = `Balans: ${credit} manat`;
-      resultEl.textContent = '';
-      spinBtn.disabled = true;
-      isSpinning = true;
-      
-      const stop1 = getRandomStop();
-      const stop2 = getRandomStop();
-      const stop3 = getRandomStop();
-      
-      let reelsStopped = 0;
-      
-      const onReelStop = () => {
-        reelsStopped++;
-        if (reelsStopped === 3) {
-          const finalPos1 = Math.round(stop1 / symbolHeight);
-          const finalPos2 = Math.round(stop2 / symbolHeight);
-          const finalPos3 = Math.round(stop3 / symbolHeight);
-          
-          const win = checkWin(finalPos1, finalPos2, finalPos3);
-          if (win > 0) {
-            credit += win;
-            resultEl.textContent = `QAZANDIN! +\( {win} manat 🎉 ( \){symbols[finalPos1 % symbols.length]})`;
-            resultEl.style.color = '#00ff00';
-          } else {
-            resultEl.textContent = 'Uğursuz... yenidən cəhd et 😏';
-            resultEl.style.color = '#ff4444';
-          }
-          creditEl.textContent = `Balans: ${credit} manat`;
-          spinBtn.disabled = false;
-          isSpinning = false;
-          
-          // Balans bitibsə
-          if (credit < 100) {
-            resultEl.textContent = 'Balans bitdi! Yenidən yüklə...';
-            spinBtn.disabled = true;
-          }
-        }
-      };
-      
-      spinReel('reel1', stop1, 0, onReelStop);
-      spinReel('reel2', stop2, 0.4, onReelStop);
-      spinReel('reel3', stop3, 0.8, onReelStop);
-    });
-  </script>
-</body>
-</html>
+    # Statları məhdudlaşdır
+    if lust > 100: lust = 100
+    if itaet > 100: itaet = 100
+
+print("\nGame Over. Yenidən oynamaq üçün proqramı təkrar işə sal!")
