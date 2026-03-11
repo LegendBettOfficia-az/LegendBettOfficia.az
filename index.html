@@ -1,185 +1,381 @@
-import pygame
-import random
-import sys
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky 3 Streak</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            background: #0a0000;
+            margin: 0;
+            padding: 0;
+            font-family: 'Press Start 2P', system-ui;
+        }
+        
+        .machine {
+            max-width: 520px;
+            margin: 20px auto;
+            background: linear-gradient(180deg, #2c0000, #110000);
+            border: 14px solid #ffaa00;
+            border-radius: 20px;
+            box-shadow: 0 0 60px #ff5500, inset 0 0 40px #ffaa00;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #000;
+            padding: 12px;
+            text-align: center;
+            border-bottom: 6px solid #ff5500;
+        }
+        
+        .logo {
+            font-size: 28px;
+            color: #ffdd00;
+            text-shadow: 0 0 20px #ff8800, 0 0 30px #ff0000;
+            letter-spacing: 4px;
+        }
+        
+        .reels-container {
+            background: #1a0000;
+            padding: 20px 15px;
+            position: relative;
+        }
+        
+        .flames {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(transparent, #ff8800, #ff2200);
+            opacity: 0.7;
+            z-index: 10;
+            animation: fire 1.2s infinite alternate;
+        }
+        
+        @keyframes fire {
+            0% { transform: scaleY(0.9); }
+            100% { transform: scaleY(1.1); }
+        }
+        
+        .reel {
+            width: 110px;
+            height: 330px;
+            background: #111;
+            border: 8px solid #ffd700;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: inset 0 0 30px #000;
+            position: relative;
+        }
+        
+        .strip {
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.08s linear;
+        }
+        
+        .symbol {
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 72px;
+            background: #222;
+            border-bottom: 4px solid #444;
+            image-rendering: pixelated;
+        }
+        
+        .symbol.bar {
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(#555, #999);
+            color: #111;
+            text-shadow: 3px 3px 0 #000;
+            letter-spacing: 2px;
+        }
+        
+        .reel::after {
+            content: '';
+            position: absolute;
+            top: 110px;
+            left: 0;
+            right: 0;
+            height: 110px;
+            border-top: 4px solid #ffdd00;
+            border-bottom: 4px solid #ffdd00;
+            box-shadow: 0 0 20px #ffdd00;
+            pointer-events: none;
+            z-index: 20;
+        }
+        
+        .controls {
+            background: #000;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        #spinBtn {
+            width: 180px;
+            height: 80px;
+            background: radial-gradient(circle at 50% 30%, #ffff00, #ff8800);
+            color: #000;
+            font-size: 28px;
+            font-weight: 900;
+            border: 8px solid #fff;
+            border-radius: 9999px;
+            box-shadow: 0 0 40px #ffff00, 0 10px 0 #aa5500;
+            cursor: pointer;
+            transition: all 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        #spinBtn:active {
+            transform: translateY(6px);
+            box-shadow: 0 4px 0 #aa5500;
+        }
+        
+        .info-bar {
+            background: #111;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+            border-top: 4px solid #ff5500;
+        }
+        
+        .win-text {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 255, 80, 0.95);
+            color: #000;
+            padding: 8px 24px;
+            font-size: 18px;
+            font-weight: 900;
+            border-radius: 9999px;
+            box-shadow: 0 0 30px #00ff80;
+            white-space: nowrap;
+            z-index: 30;
+            animation: winPop 0.6s;
+        }
+        
+        @keyframes winPop {
+            0% { transform: translateX(-50%) scale(0.2); }
+            70% { transform: translateX(-50%) scale(1.2); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="machine mx-auto">
+        <!-- Header -->
+        <div class="header flex items-center justify-between px-6">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🔥</span>
+                <div class="logo">LUCKY 3 STREAK</div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="window.location.reload()" 
+                        class="bg-gray-800 hover:bg-gray-700 px-5 py-2 rounded text-sm">GERİ</button>
+            </div>
+        </div>
 
-pygame.init()
+        <!-- Reels -->
+        <div class="reels-container" id="reelsContainer">
+            <div class="flames"></div>
+            <div class="flex justify-center gap-4" id="reels">
+                <!-- JS ilə doldurulacaq -->
+            </div>
+        </div>
 
-# Ekran
-WIDTH, HEIGHT = 1000, 700
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("👑 MÜKƏMMƏL KRAL SLOT - 1Win Edition 👑")
+        <!-- Info -->
+        <div class="info-bar text-yellow-300">
+            <div>
+                <span class="text-xs block text-gray-400">BAHİS</span>
+                <span id="betAmount" class="text-2xl font-bold text-white">120</span>
+            </div>
+            <div class="text-center">
+                <span class="text-xs block text-gray-400">ÇİZGİ</span>
+                <span class="text-2xl font-bold text-white">5</span>
+            </div>
+            <div class="text-right">
+                <span class="text-xs block text-gray-400">BAKİYE</span>
+                <span id="balance" class="text-2xl font-bold text-white">999,970</span>
+            </div>
+        </div>
 
-# Rənglər
-BLACK = (0, 0, 0)
-GOLD = (255, 215, 0)
-RED = (255, 50, 50)
-GREEN = (50, 255, 50)
-GRAY = (100, 100, 100)
-DARK_BLUE = (10, 20, 60)
-WHITE = (255, 255, 255)
-
-# Fontlar
-big_font = pygame.font.SysFont("Arial", 65, bold=True)
-font = pygame.font.SysFont("Arial", 38)
-small_font = pygame.font.SysFont("Arial", 26)
-
-# Simvollar (hamısı emoji - heç bir səhv çıxmayacaq)
-SYMBOLS = ['🍒', '🍋', '🍊', '🍇', '🛎️', '💎', '7️⃣', '⭐']
-PAYOUTS = {'🍒': 25, '🍋': 35, '🍊': 45, '🍇': 60, '🛎️': 90, '💎': 180, '7️⃣': 350, '⭐': 600}
-
-class Button:
-    def __init__(self, x, y, w, h, text):
-        self.rect = pygame.Rect(x, y, w, h)
-        self.text = text
-
-    def draw(self, color):
-        pygame.draw.rect(screen, color, self.rect, border_radius=15)
-        pygame.draw.rect(screen, GOLD, self.rect, 6, border_radius=15)
-        text_surf = font.render(self.text, True, BLACK)
-        screen.blit(text_surf, text_surf.get_rect(center=self.rect.center))
-
-    def is_clicked(self, pos):
-        return self.rect.collidepoint(pos)
-
-# Oyun dəyişənləri
-balance = 10000  # daha çox başlanğıc
-bet = 100
-reels = [[random.choice(SYMBOLS) for _ in range(3)] for _ in range(3)]
-is_spinning = False
-current_win = 0
-win_time = 0
-win_display_duration = 3000  # 3 saniyə
-
-spin_button = Button(410, 550, 180, 85, "SPIN!")
-bet_up = Button(680, 555, 70, 70, "+")
-bet_down = Button(760, 555, 70, 70, "-")
-
-def draw_reels():
-    for i in range(3):
-        for j in range(3):
-            x = 165 + i * 225
-            y = 130 + j * 118
-            # Qızıl çərçivə
-            pygame.draw.rect(screen, (40, 30, 10), (x-20, y-20, 205, 128), border_radius=20)
-            pygame.draw.rect(screen, GOLD, (x-20, y-20, 205, 128), 8, border_radius=20)
+        <!-- Controls -->
+        <div class="controls">
+            <button onclick="changeBet(-10)" 
+                    class="w-12 h-12 bg-red-600 hover:bg-red-700 rounded-full text-3xl font-bold text-white shadow-inner">−</button>
             
-            color = GOLD if reels[i][j] in ['7️⃣', '💎', '⭐'] else WHITE
-            sym_text = big_font.render(reels[i][j], True, color)
-            screen.blit(sym_text, (x + 45, y + 15))
-
-def calculate_win():
-    win = 0
-    # 3 üfüqi xətt
-    for row in range(3):
-        if reels[0][row] == reels[1][row] == reels[2][row]:
-            sym = reels[0][row]
-            win += PAYOUTS.get(sym, 10) * (bet // 10)
-    
-    # 2 diagonal
-    if reels[0][0] == reels[1][1] == reels[2][2]:
-        sym = reels[0][0]
-        win += PAYOUTS.get(sym, 10) * (bet // 10)
-    if reels[0][2] == reels[1][1] == reels[2][0]:
-        sym = reels[0][2]
-        win += PAYOUTS.get(sym, 10) * (bet // 10)
-    
-    return win
-
-def spin_animation():
-    global reels
-    # Sürətli spin
-    for _ in range(16):
-        for i in range(3):
-            reels[i] = [random.choice(SYMBOLS) for _ in range(3)]
-        draw_game()
-        pygame.display.flip()
-        pygame.time.delay(45)
-    
-    # Reel-reel dayanma (real kazino effekti)
-    for r in range(3):
-        target = [random.choice(SYMBOLS) for _ in range(3)]
-        for _ in range(9):
-            reels[r] = [random.choice(SYMBOLS) for _ in range(3)]
-            draw_game()
-            pygame.display.flip()
-            pygame.time.delay(80 + r * 30)
-        reels[r] = target
-        draw_game()
-        pygame.display.flip()
-        pygame.time.delay(320)
-
-def draw_game():
-    screen.fill(DARK_BLUE)
-    
-    # Başlıq
-    title = big_font.render("👑 KRAL SLOT 👑", True, GOLD)
-    screen.blit(title, (WIDTH//2 - title.get_width()//2, 25))
-    
-    # Balans və mərc
-    bal_text = font.render(f"Balans: {balance:,} AZN", True, GOLD)
-    screen.blit(bal_text, (60, 90))
-    bet_text = font.render(f"Mərc: {bet}", True, GOLD)
-    screen.blit(bet_text, (WIDTH - 340, 90))
-    
-    draw_reels()
-    
-    # Qazanma yazısı (3 saniyə sonra yox olur)
-    if current_win > 0 and pygame.time.get_ticks() - win_time < win_display_duration:
-        if current_win >= 5000:  # JACKPOT effekti
-            win_surf = big_font.render(f"🎊 JACKPOT! {current_win} AZN 🎊", True, (255, 215, 0))
-        else:
-            win_surf = big_font.render(f"🎉 QAZANDIN: {current_win} AZN! 🎉", True, GREEN)
-        screen.blit(win_surf, (WIDTH//2 - win_surf.get_width()//2, 465))
-    else:
-        global current_win
-        current_win = 0
-    
-    # Spin düyməsi (balans kifayət etməyəndə boz + spin zamanı blok)
-    spin_color = GRAY if balance < bet or is_spinning else GREEN
-    spin_button.draw(spin_color)
-    
-    bet_up.draw(GOLD)
-    bet_down.draw(GOLD)
-    
-    info = small_font.render("3 eyni simvol = QAZAN! 👑 Diagonal da işləyir!", True, (200,200,200))
-    screen.blit(info, (WIDTH//2 - info.get_width()//2, 645))
-    
-    pygame.display.flip()
-
-# Əsas dövrə
-clock = pygame.time.Clock()
-running = True
-global win_time
-win_time = 0
-
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+            <button id="spinBtn" onclick="startSpin()">
+                <span class="text-4xl">▶</span>
+                <span class="text-xl tracking-widest">FIRLAT</span>
+            </button>
             
-        if event.type == pygame.MOUSEBUTTONDOWN and not is_spinning:
-            pos = pygame.mouse.get_pos()
+            <button onclick="changeBet(10)" 
+                    class="w-12 h-12 bg-green-600 hover:bg-green-700 rounded-full text-3xl font-bold text-white shadow-inner">+</button>
+        </div>
+
+        <!-- Footer info -->
+        <div class="info-bar text-xs text-gray-400 px-6 py-3 flex justify-between items-center">
+            <div>JETON DƏYƏRİ <span class="text-white">$0.01</span></div>
+            <div class="flex gap-4">
+                <span onclick="alert('Auto spin gələcək versiyada!')" class="cursor-pointer">🔄</span>
+                <span onclick="alert('Turbo mod gələcək versiyada!')" class="cursor-pointer">⚡</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simvollar (şəkillərdəki kimi)
+        const symbolTypes = [
+            { type: 'BAR', html: `<div class="symbol bar">BAR</div>` },
+            { type: 'GRAPE', html: `<div class="symbol">🍇</div>` },
+            { type: 'GRAPE2', html: `<div class="symbol text-blue-300">🍇</div>` }
+        ];
+
+        let balance = 999970;
+        let bet = 120;
+        let isSpinning = false;
+
+        const reelsDiv = document.getElementById('reels');
+        const balanceEl = document.getElementById('balance');
+        const betEl = document.getElementById('betAmount');
+
+        // 3 reel yarat
+        let reelStrips = [];
+        
+        function createReels() {
+            reelsDiv.innerHTML = '';
+            reelStrips = [];
             
-            if spin_button.is_clicked(pos) and balance >= bet:
-                balance -= bet
-                is_spinning = True
-                current_win = 0
-                spin_animation()
+            for (let i = 0; i < 3; i++) {
+                const reel = document.createElement('div');
+                reel.className = 'reel';
                 
-                current_win = calculate_win()
-                if current_win > 0:
-                    balance += current_win
-                    win_time = pygame.time.get_ticks()
+                const strip = document.createElement('div');
+                strip.className = 'strip';
                 
-                is_spinning = False
-            
-            elif bet_up.is_clicked(pos) and bet < 5000:
-                bet += 50
-            elif bet_down.is_clicked(pos) and bet > 50:
-                bet -= 50
-    
-    draw_game()
-    clock.tick(60)
+                // 40 simvollu uzun zolaq (fırlanma üçün)
+                for (let j = 0; j < 40; j++) {
+                    const randomSymbol = symbolTypes[Math.floor(Math.random() * symbolTypes.length)];
+                    strip.innerHTML += randomSymbol.html;
+                }
+                
+                reel.appendChild(strip);
+                reelsDiv.appendChild(reel);
+                reelStrips.push(strip);
+            }
+        }
 
-pygame.quit()
-sys.exit()
+        function changeBet(amount) {
+            if (isSpinning) return;
+            bet = Math.max(50, Math.min(500, bet + amount));
+            betEl.textContent = bet;
+        }
+
+        async function startSpin() {
+            if (isSpinning || balance < bet) {
+                if (balance < bet) alert("Bakiyə kifayət deyil!");
+                return;
+            }
+            
+            isSpinning = true;
+            balance -= bet;
+            balanceEl.textContent = balance.toLocaleString('az-AZ');
+            
+            // Hər reel üçün fərqli sürət və dayanıq nöqtəsi
+            const finalMiddleSymbols = [];
+            
+            for (let i = 0; i < 3; i++) {
+                const strip = reelStrips[i];
+                const reelElement = strip.parentElement;
+                
+                // Sürətli fırlanma
+                const spinTime = 1800 + (i * 400); // birinci reel tez, sonuncu yavaş dayanır
+                
+                strip.style.transition = `transform ${spinTime}ms cubic-bezier(0.25, 0.1, 0.3, 1)`;
+                
+                // Çox fırlanma (tam dövrələr + random)
+                const fullSpins = 12 + Math.floor(Math.random() * 8);
+                const symbolHeight = 110;
+                const randomStop = Math.floor(Math.random() * 12) * symbolHeight;
+                const distance = fullSpins * (40 * symbolHeight) + randomStop;
+                
+                strip.style.transform = `translateY(-${distance}px)`;
+                
+                // Dayanma vaxtı gözlə
+                await new Promise(resolve => setTimeout(resolve, spinTime + 50));
+                
+                // Tam dayanma (real simvollara yapışdır)
+                strip.style.transition = 'none';
+                const finalTypeIndex = Math.floor(Math.random() * symbolTypes.length);
+                const finalSymbol = symbolTypes[finalTypeIndex];
+                
+                // Orta simvolu qeyd et (qazanma yoxlaması üçün)
+                if (i === 0) finalMiddleSymbols[0] = finalSymbol.type;
+                if (i === 1) finalMiddleSymbols[1] = finalSymbol.type;
+                if (i === 2) finalMiddleSymbols[2] = finalSymbol.type;
+                
+                // Orta simvolu düzgün yerə gətir
+                strip.style.transform = `translateY(-${(18 + finalTypeIndex) * symbolHeight}px)`;
+            }
+            
+            // Qazanc yoxlaması
+            setTimeout(() => {
+                const win = checkWin(finalMiddleSymbols);
+                if (win > 0) {
+                    balance += win;
+                    balanceEl.textContent = balance.toLocaleString('az-AZ');
+                    
+                    const winMsg = document.createElement('div');
+                    winMsg.className = 'win-text';
+                    winMsg.innerHTML = `🎉 40 ÖDƏR! +${win}`;
+                    document.getElementById('reelsContainer').appendChild(winMsg);
+                    
+                    setTimeout(() => winMsg.remove(), 2800);
+                }
+                isSpinning = false;
+            }, 800);
+        }
+
+        function checkWin(middles) {
+            if (middles[0] === 'GRAPE' && middles[1] === 'GRAPE' && middles[2] === 'GRAPE') {
+                return bet * 40; // screenshots-dakı kimi 40 ödər
+            }
+            if (middles[0] === 'BAR' && middles[1] === 'BAR' && middles[2] === 'BAR') {
+                return bet * 20;
+            }
+            return 0;
+        }
+
+        // Başlanğıc
+        createReels();
+        balanceEl.textContent = balance.toLocaleString('az-AZ');
+        betEl.textContent = bet;
+        
+        // Klaviatura ilə də işləsin (SPACE = fırlat)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === ' ' && !isSpinning) {
+                e.preventDefault();
+                startSpin();
+            }
+        });
+    </script>
+</body>
+</html>
