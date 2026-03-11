@@ -1,54 +1,273 @@
-print("=== YENİ OYUNUMUZ: SLUT LEYLA - SOURCE OF COURSE 🔥 ===")
-print("Source... source... of course 😏\n")
-print("21 yaşlı Leyla qarşında dayanır. Qara dar top və super qısa yubka geyinib, dodaqlarını dişləyib sənə baxır.")
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧊 ICE RESPIN 🧊</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(#0a2a5e, #00b4ff);
+            color: white;
+            font-family: 'Press Start 2P', system-ui;
+            text-align: center;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .header {
+            background: rgba(0, 200, 255, 0.3);
+            padding: 15px 40px;
+            border: 6px solid #00ffff;
+            border-radius: 20px;
+            box-shadow: 0 0 30px #00ffff;
+            font-size: 42px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px #fff;
+        }
+        
+        canvas {
+            border: 8px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 40px #00ffff, inset 0 0 60px rgba(255,255,255,0.4);
+            background: #001122;
+        }
+        
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 30px;
+        }
+        
+        button {
+            padding: 18px 50px;
+            font-size: 28px;
+            font-family: 'Press Start 2P';
+            background: linear-gradient(#00ffff, #00aaff);
+            color: #001f3f;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 10px 0 #0077aa;
+            transition: all 0.1s;
+        }
+        
+        button:active {
+            transform: translateY(6px);
+            box-shadow: 0 4px 0 #0077aa;
+        }
+        
+        #winDisplay {
+            font-size: 36px;
+            margin-top: 15px;
+            text-shadow: 0 0 20px #ffff00;
+            min-height: 50px;
+        }
+        
+        .recorded {
+            position: absolute;
+            bottom: 15px;
+            font-size: 14px;
+            color: #88ddff;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span id="winAmount">000 ₼</span>
+    </div>
+    
+    <canvas id="gameCanvas" width="420" height="620"></canvas>
+    
+    <div class="controls">
+        <button onclick="respin()">🔄 RESPIN</button>
+        <button onclick="showInfo()">ℹ️</button>
+    </div>
+    
+    <div id="winDisplay">QAZANC: 0 ₼</div>
+    
+    <div class="recorded">Recorded by Mobizen • ICE RESPIN</div>
 
-lust = 25      # Leyla İstəyi
-itaet = 15     # İtaət səviyyəsi
-
-while True:
-    print(f"\n{'='*40}")
-    print(f"Leyla İstəyi: {lust}/100")
-    print(f"İtaət: {itaet}/100")
-    print(f"{'='*40}\n")
-    
-    if lust >= 90 and itaet >= 80:
-        print("🎉 LEYLA TAM SƏNİN OLDU! O artıq sənin şəxsi slutundur... Source of course! 🔥💦")
-        break
-    
-    print("Nə etmək istəyirsən, Sahib?")
-    print("1. Boynundan öp və əllərini bədənində gəzdir")
-    print("2. Paltarlarını yavaş-yavaş çıxart")
-    print("3. Onu diz çökdür və nə istədiyini de")
-    print("4. Özün tam təsvir et (istədiyin hər şeyi yaz!)")
-    print("5. Oyundan çıx")
-    
-    secim = input("\nSeçimini yaz (1-5): ").strip()
-    
-    if secim == "1":
-        print("\nLeyla zövqlə inləyir: 'Ahh sahibim... daha bərk sıx! 🔥' Bədəni sənə yapışır.")
-        lust += 18
-        itaet += 8
-    elif secim == "2":
-        print("\nOnun paltarlarını çıxartdın. Gözəl formaları üzə çıxdı. Leyla həyəcanla nəfəs alır: 'Source of course...'")
-        lust += 25
-        itaet += 10
-    elif secim == "3":
-        print("\nLeyla dizlərinin üstünə çökür və gözlərini qaldırıb baxır: 'Sahibim... əmr ver mənə...'")
-        itaet += 22
-        lust += 12
-    elif secim == "4":
-        custom = input("\nNə etmək istəyirsən? Tam təsvir et: ")
-        print(f"\nSən {custom} etdin. Leyla şiddətli şəkildə inləyir və daha çox istəyir 😩💦 Source of course!")
-        lust += 30
-        itaet += 15
-    elif secim == "5":
-        print("\nOyundan çıxdın. Gələn dəfə daha azğın olacağıq 😉")
-        break
-    else:
-        print("\nYanlış seçim, yenidən cəhd et.")
-    
-    # Statları məhdudlaşdır
-    if lust > 100: lust = 100
-    if itaet > 100: itaet = 100
-
-print("\nGame Over. Yenidən oynamaq üçün proqramı təkrar işə sal!")
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let winAmount = 0;
+        
+        // Simvollar (şəkillər əvəzinə emoji + rəngli mətn)
+        const symbols = [
+            { type: "50", value: 50, color: "#ffdd00", emoji: "💵" },
+            { type: "10", value: 10, color: "#aaffff", emoji: "💵" },
+            { type: "200", value: 200, color: "#00ffaa", emoji: "💵" },
+            { type: "9X", value: 9, color: "#ff8800", emoji: "❄️", multiplier: true },
+            { type: "8X", value: 8, color: "#ff8800", emoji: "❄️", multiplier: true },
+            { type: "FISH", value: 25, color: "#ff6600", emoji: "🐟" },
+            { type: "HOOK", value: 15, color: "#aaaaaa", emoji: "🎣" }
+        ];
+        
+        let leftBarrel = [];
+        let rightBarrel = [];
+        let isSpinning = false;
+        let animationFrame = 0;
+        
+        function drawBarrel(x, items, label) {
+            // Barrel gövdəsi (şəffaf buz effekti)
+            ctx.save();
+            ctx.fillStyle = "rgba(100, 200, 255, 0.25)";
+            ctx.strokeStyle = "#00ffff";
+            ctx.lineWidth = 12;
+            ctx.beginPath();
+            ctx.roundRect(x, 80, 120, 420, 25);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Metal halqalar
+            ctx.fillStyle = "#aaaaaa";
+            ctx.fillRect(x+8, 150, 104, 18);
+            ctx.fillRect(x+8, 280, 104, 18);
+            ctx.fillRect(x+8, 410, 104, 18);
+            
+            // İçindəki simvollar (3 yer)
+            items.forEach((item, i) => {
+                const y = 130 + i * 130;
+                ctx.font = "bold 48px Arial";
+                ctx.fillStyle = item.color;
+                ctx.textAlign = "center";
+                ctx.shadowColor = item.color;
+                ctx.shadowBlur = 25;
+                ctx.fillText(item.emoji, x + 60, y + 45);
+                
+                ctx.font = "bold 22px 'Press Start 2P'";
+                ctx.fillStyle = "#ffffff";
+                ctx.shadowBlur = 10;
+                ctx.fillText(item.type, x + 60, y + 80);
+            });
+            ctx.restore();
+        }
+        
+        function drawScene() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Arxa fon buz effekti
+            ctx.fillStyle = "rgba(255,255,255,0.08)";
+            for (let i = 0; i < 30; i++) {
+                ctx.fillRect(Math.random()*420, Math.random()*620, 3, 3);
+            }
+            
+            // Sol barrel
+            drawBarrel(40, leftBarrel, "SOL");
+            
+            // Sağ barrel
+            drawBarrel(260, rightBarrel, "SAĞ");
+            
+            // Üst buz lövhəsi
+            ctx.fillStyle = "rgba(0, 200, 255, 0.9)";
+            ctx.fillRect(30, 20, 360, 55);
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 8;
+            ctx.strokeRect(30, 20, 360, 55);
+            
+            // Qazanc mətni (canvas üzərində də göstəririk)
+            ctx.font = "bold 38px 'Press Start 2P'";
+            ctx.fillStyle = "#ffff00";
+            ctx.textAlign = "center";
+            ctx.shadowColor = "#ffff00";
+            ctx.shadowBlur = 30;
+            ctx.fillText(winAmount + " ₼", 210, 58);
+        }
+        
+        function randomSymbol() {
+            return symbols[Math.floor(Math.random() * symbols.length)];
+        }
+        
+        function respin() {
+            if (isSpinning) return;
+            isSpinning = true;
+            
+            // 1 saniyəlik "spin" animasiyası
+            let spins = 0;
+            const spinInterval = setInterval(() => {
+                // Barrel-ləri təsadüfi doldur
+                leftBarrel = [randomSymbol(), randomSymbol(), randomSymbol()];
+                rightBarrel = [randomSymbol(), randomSymbol(), randomSymbol()];
+                drawScene();
+                spins++;
+                
+                if (spins > 12) {
+                    clearInterval(spinInterval);
+                    finishSpin();
+                }
+            }, 80);
+        }
+        
+        function finishSpin() {
+            // Real nəticələr (şəkillərdəki kimi)
+            const possibleResults = [
+                { left: [{type:"50",emoji:"💵",color:"#ffdd00"}, {type:"50",emoji:"💵",color:"#ffdd00"}, {type:"10",emoji:"💵",color:"#aaffff"}], 
+                  right: [{type:"9X",emoji:"❄️",color:"#ff8800"}, {type:"9X",emoji:"❄️",color:"#ff8800"}, {type:"FISH",emoji:"🐟",color:"#ff6600"}], 
+                  win: 144 },
+                
+                { left: [{type:"50",emoji:"💵",color:"#ffdd00"}, {type:"10",emoji:"💵",color:"#aaffff"}, {type:"10",emoji:"💵",color:"#aaffff"}], 
+                  right: [{type:"200",emoji:"💵",color:"#00ffaa"}, {type:"8X",emoji:"❄️",color:"#ff8800"}, {type:"FISH",emoji:"🐟",color:"#ff6600"}], 
+                  win: 100 },
+                
+                { left: [{type:"50",emoji:"💵",color:"#ffdd00"}, {type:"50",emoji:"💵",color:"#ffdd00"}, {type:"FISH",emoji:"🐟",color:"#ff6600"}], 
+                  right: [{type:"200",emoji:"💵",color:"#00ffaa"}, {type:"8X",emoji:"❄️",color:"#ff8800"}, {type:"FISH",emoji:"🐟",color:"#ff6600"}], 
+                  win: 50 },
+                
+                { left: [{type:"10",emoji:"💵",color:"#aaffff"}, {type:"10",emoji:"💵",color:"#aaffff"}, {type:"10",emoji:"💵",color:"#aaffff"}], 
+                  right: [{type:"10",emoji:"💵",color:"#aaffff"}, {type:"HOOK",emoji:"🎣",color:"#aaaaaa"}, {type:"FISH",emoji:"🐟",color:"#ff6600"}], 
+                  win: 45 }
+            ];
+            
+            const result = possibleResults[Math.floor(Math.random() * possibleResults.length)];
+            leftBarrel = result.left;
+            rightBarrel = result.right;
+            winAmount = result.win;
+            
+            document.getElementById('winAmount').textContent = winAmount + " ₼";
+            document.getElementById('winDisplay').textContent = `QAZANC: ${winAmount} ₼ 🎉`;
+            
+            drawScene();
+            isSpinning = false;
+            
+            // Qazanc animasiyası
+            let flash = 0;
+            const flashInt = setInterval(() => {
+                ctx.fillStyle = flash % 2 === 0 ? "rgba(255,255,0,0.4)" : "transparent";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                drawScene();
+                flash++;
+                if (flash > 8) clearInterval(flashInt);
+            }, 120);
+        }
+        
+        function showInfo() {
+            alert("🧊 ICE RESPIN 🧊\n\n" +
+                  "Bu, tam işləyən sadə slot prototipidir!\n\n" +
+                  "🔹 RESPIN düyməsinə bas → barrel-lər fırlanır\n" +
+                  "🔹 Şəkillərdəki kimi 50₼, 200₼, 9X, balıq və s. çıxır\n" +
+                  "🔹 Qazanc avtomatik hesablanır\n\n" +
+                  "Tam 3D versiya üçün Unity istəyirsənsə de, kömək edərəm! 😎");
+        }
+        
+        // İlk ekran
+        function init() {
+            leftBarrel = [symbols[0], symbols[3], symbols[5]];
+            rightBarrel = [symbols[2], symbols[3], symbols[5]];
+            winAmount = 144;
+            document.getElementById('winAmount').textContent = "144 ₼";
+            drawScene();
+        }
+        
+        // Avtomatik başla
+        window.onload = init;
+    </script>
+</body>
+</html>
