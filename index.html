@@ -1,153 +1,184 @@
 import pygame
 import random
 import sys
+
 pygame.init()
 
-# Ekran ayarları
+# Ekran
 WIDTH, HEIGHT = 1000, 700
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("👑 KRAL MEYVƏ SLOT - 1Win Stil 👑")
+pygame.display.set_caption("👑 MÜKƏMMƏL KRAL SLOT - 1Win Edition 👑")
 
 # Rənglər
 BLACK = (0, 0, 0)
 GOLD = (255, 215, 0)
 RED = (255, 50, 50)
 GREEN = (50, 255, 50)
+GRAY = (100, 100, 100)
 DARK_BLUE = (10, 20, 60)
 WHITE = (255, 255, 255)
 
 # Fontlar
-big_font = pygame.font.SysFont("Arial", 60, bold=True)
-font = pygame.font.SysFont("Arial", 36)
-small_font = pygame.font.SysFont("Arial", 24)
+big_font = pygame.font.SysFont("Arial", 65, bold=True)
+font = pygame.font.SysFont("Arial", 38)
+small_font = pygame.font.SysFont("Arial", 26)
 
-# Simvollar və ödənişlər
-SYMBOLS = ['🍒', '🍋', '🍊', '🍇', '🛎️', 'BAR', '7️⃣', '⭐']
-PAYOUTS = {'🍒': 20, '🍋': 30, '🍊': 40, '🍇': 50, '🛎️': 80, 'BAR': 150, '7️⃣': 300, '⭐': 500}
+# Simvollar (hamısı emoji - heç bir səhv çıxmayacaq)
+SYMBOLS = ['🍒', '🍋', '🍊', '🍇', '🛎️', '💎', '7️⃣', '⭐']
+PAYOUTS = {'🍒': 25, '🍋': 35, '🍊': 45, '🍇': 60, '🛎️': 90, '💎': 180, '7️⃣': 350, '⭐': 600}
 
 class Button:
-    def __init__(self, x, y, w, h, text, color):
+    def __init__(self, x, y, w, h, text):
         self.rect = pygame.Rect(x, y, w, h)
         self.text = text
-        self.color = color
 
-    def draw(self):
-        pygame.draw.rect(screen, self.color, self.rect, border_radius=12)
-        pygame.draw.rect(screen, GOLD, self.rect, 5, border_radius=12)
+    def draw(self, color):
+        pygame.draw.rect(screen, color, self.rect, border_radius=15)
+        pygame.draw.rect(screen, GOLD, self.rect, 6, border_radius=15)
         text_surf = font.render(self.text, True, BLACK)
-        text_rect = text_surf.get_rect(center=self.rect.center)
-        screen.blit(text_surf, text_rect)
+        screen.blit(text_surf, text_surf.get_rect(center=self.rect.center))
 
     def is_clicked(self, pos):
         return self.rect.collidepoint(pos)
 
 # Oyun dəyişənləri
-balance = 5000
+balance = 10000  # daha çox başlanğıc
 bet = 100
 reels = [[random.choice(SYMBOLS) for _ in range(3)] for _ in range(3)]
+is_spinning = False
+current_win = 0
+win_time = 0
+win_display_duration = 3000  # 3 saniyə
 
-spin_button = Button(410, 550, 180, 80, "SPIN!", GREEN)
-bet_up = Button(680, 555, 65, 65, "+", GOLD)
-bet_down = Button(760, 555, 65, 65, "-", GOLD)
+spin_button = Button(410, 550, 180, 85, "SPIN!")
+bet_up = Button(680, 555, 70, 70, "+")
+bet_down = Button(760, 555, 70, 70, "-")
 
 def draw_reels():
     for i in range(3):
         for j in range(3):
-            x = 170 + i * 210
-            y = 130 + j * 115
-            pygame.draw.rect(screen, (25, 25, 70), (x-15, y-15, 185, 115), border_radius=15)
-            sym_text = big_font.render(reels[i][j], True, GOLD if reels[i][j] in ['7️⃣', 'BAR', '⭐'] else WHITE)
-            screen.blit(sym_text, (x + 35, y + 10))
+            x = 165 + i * 225
+            y = 130 + j * 118
+            # Qızıl çərçivə
+            pygame.draw.rect(screen, (40, 30, 10), (x-20, y-20, 205, 128), border_radius=20)
+            pygame.draw.rect(screen, GOLD, (x-20, y-20, 205, 128), 8, border_radius=20)
+            
+            color = GOLD if reels[i][j] in ['7️⃣', '💎', '⭐'] else WHITE
+            sym_text = big_font.render(reels[i][j], True, color)
+            screen.blit(sym_text, (x + 45, y + 15))
 
 def calculate_win():
     win = 0
-    for row in range(3):  # 3 xətt (üst, orta, alt)
+    # 3 üfüqi xətt
+    for row in range(3):
         if reels[0][row] == reels[1][row] == reels[2][row]:
-            symbol = reels[0][row]
-            multiplier = PAYOUTS.get(symbol, 10)
-            win += multiplier * (bet // 10)
+            sym = reels[0][row]
+            win += PAYOUTS.get(sym, 10) * (bet // 10)
+    
+    # 2 diagonal
+    if reels[0][0] == reels[1][1] == reels[2][2]:
+        sym = reels[0][0]
+        win += PAYOUTS.get(sym, 10) * (bet // 10)
+    if reels[0][2] == reels[1][1] == reels[2][0]:
+        sym = reels[0][2]
+        win += PAYOUTS.get(sym, 10) * (bet // 10)
+    
     return win
 
 def spin_animation():
     global reels
     # Sürətli spin
-    for _ in range(14):
+    for _ in range(16):
         for i in range(3):
             reels[i] = [random.choice(SYMBOLS) for _ in range(3)]
-        draw_game(0)
+        draw_game()
         pygame.display.flip()
-        pygame.time.delay(55)
+        pygame.time.delay(45)
     
-    # Reel-reel dayanma
+    # Reel-reel dayanma (real kazino effekti)
     for r in range(3):
         target = [random.choice(SYMBOLS) for _ in range(3)]
-        for _ in range(8):
+        for _ in range(9):
             reels[r] = [random.choice(SYMBOLS) for _ in range(3)]
-            draw_game(0)
+            draw_game()
             pygame.display.flip()
-            pygame.time.delay(95 + r*25)
+            pygame.time.delay(80 + r * 30)
         reels[r] = target
-        draw_game(0)
+        draw_game()
         pygame.display.flip()
-        pygame.time.delay(350)
+        pygame.time.delay(320)
 
-def draw_game(current_win=0):
+def draw_game():
     screen.fill(DARK_BLUE)
     
     # Başlıq
     title = big_font.render("👑 KRAL SLOT 👑", True, GOLD)
     screen.blit(title, (WIDTH//2 - title.get_width()//2, 25))
     
-    # Balans
-    bal_text = font.render(f"Balans: {balance} AZN", True, GOLD)
-    screen.blit(bal_text, (70, 85))
-    
+    # Balans və mərc
+    bal_text = font.render(f"Balans: {balance:,} AZN", True, GOLD)
+    screen.blit(bal_text, (60, 90))
     bet_text = font.render(f"Mərc: {bet}", True, GOLD)
-    screen.blit(bet_text, (WIDTH - 320, 85))
+    screen.blit(bet_text, (WIDTH - 340, 90))
     
     draw_reels()
     
-    if current_win > 0:
-        win_text = big_font.render(f"🎉 QAZANDIN: {current_win}! 🎉", True, GREEN)
-        screen.blit(win_text, (WIDTH//2 - win_text.get_width()//2, 475))
+    # Qazanma yazısı (3 saniyə sonra yox olur)
+    if current_win > 0 and pygame.time.get_ticks() - win_time < win_display_duration:
+        if current_win >= 5000:  # JACKPOT effekti
+            win_surf = big_font.render(f"🎊 JACKPOT! {current_win} AZN 🎊", True, (255, 215, 0))
+        else:
+            win_surf = big_font.render(f"🎉 QAZANDIN: {current_win} AZN! 🎉", True, GREEN)
+        screen.blit(win_surf, (WIDTH//2 - win_surf.get_width()//2, 465))
+    else:
+        global current_win
+        current_win = 0
     
-    spin_button.draw()
-    bet_up.draw()
-    bet_down.draw()
+    # Spin düyməsi (balans kifayət etməyəndə boz + spin zamanı blok)
+    spin_color = GRAY if balance < bet or is_spinning else GREEN
+    spin_button.draw(spin_color)
     
-    # Kiçik məlumat
-    info = small_font.render("3 eyni simvol = QAZANMA! 👑", True, (200,200,200))
-    screen.blit(info, (WIDTH//2 - info.get_width()//2, 640))
+    bet_up.draw(GOLD)
+    bet_down.draw(GOLD)
+    
+    info = small_font.render("3 eyni simvol = QAZAN! 👑 Diagonal da işləyir!", True, (200,200,200))
+    screen.blit(info, (WIDTH//2 - info.get_width()//2, 645))
     
     pygame.display.flip()
 
-# Əsas oyun dövrəsi
+# Əsas dövrə
 clock = pygame.time.Clock()
 running = True
-current_win = 0
+global win_time
+win_time = 0
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and not is_spinning:
             pos = pygame.mouse.get_pos()
             
             if spin_button.is_clicked(pos) and balance >= bet:
                 balance -= bet
+                is_spinning = True
                 current_win = 0
                 spin_animation()
+                
                 current_win = calculate_win()
                 if current_win > 0:
                     balance += current_win
+                    win_time = pygame.time.get_ticks()
+                
+                is_spinning = False
             
-            elif bet_up.is_clicked(pos) and bet < 2000:
+            elif bet_up.is_clicked(pos) and bet < 5000:
                 bet += 50
             elif bet_down.is_clicked(pos) and bet > 50:
                 bet -= 50
     
-    draw_game(current_win)
+    draw_game()
     clock.tick(60)
 
 pygame.quit()
